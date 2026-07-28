@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AI Chief of Staff — PRD</title>
+<style>
+  :root {
+    --paper: #F5F6F4; --paper-2: #FFFFFF; --paper-sunk: #ECEEEA;
+    --ink: #16191C; --ink-soft: #454C52; --ink-faint: #6C757C;
+    --line: #DCDFD9; --line-strong: #C6CABF;
+    --accent: #0E6B6A; --accent-bright: #0E7A78; --accent-wash: #E4EEEC;
+    --amber: #A9691A; --amber-wash: #F4E9D7;
+    --good: #2E7A57; --warn: #A9691A; --crit: #B23B33;
+    --shadow: 0 1px 2px rgba(20,25,28,.05);
+    --radius: 4px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0F1213; --paper-2: #171B1D; --paper-sunk: #0A0D0E;
+      --ink: #EAEDEA; --ink-soft: #B2B9B7; --ink-faint: #7E8785;
+      --line: #262C2D; --line-strong: #333B3C;
+      --accent: #35B6B0; --accent-bright: #57D3CC; --accent-wash: #13302E;
+      --amber: #D69A48; --amber-wash: #2E2413;
+      --good: #4FB584; --warn: #D69A48; --crit: #E0685E;
+      --shadow: 0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #F5F6F4; --paper-2: #FFFFFF; --paper-sunk: #ECEEEA;
+    --ink: #16191C; --ink-soft: #454C52; --ink-faint: #6C757C;
+    --line: #DCDFD9; --line-strong: #C6CABF;
+    --accent: #0E6B6A; --accent-bright: #0E7A78; --accent-wash: #E4EEEC;
+    --amber: #A9691A; --amber-wash: #F4E9D7;
+    --good: #2E7A57; --warn: #A9691A; --crit: #B23B33;
+    --shadow: 0 1px 2px rgba(20,25,28,.05);
+  }
+  :root[data-theme="dark"] {
+    --paper: #0F1213; --paper-2: #171B1D; --paper-sunk: #0A0D0E;
+    --ink: #EAEDEA; --ink-soft: #B2B9B7; --ink-faint: #7E8785;
+    --line: #262C2D; --line-strong: #333B3C;
+    --accent: #35B6B0; --accent-bright: #57D3CC; --accent-wash: #13302E;
+    --amber: #D69A48; --amber-wash: #2E2413;
+    --good: #4FB584; --warn: #D69A48; --crit: #E0685E;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: -apple-system, "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px; line-height: 1.55; letter-spacing: -0.004em;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono, .eyebrow, .k, thead th, .node, .lnum, .glabel, .scale, .pn, .pdur, .chip {
+    font-family: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, "Cascadia Code", monospace;
+  }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 28px; }
+  section { padding: 32px 0; border-top: 1px solid var(--line); }
+  section:first-of-type { border-top: none; }
+
+  .eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 10px;
+  }
+  h1, h2, h3 { text-wrap: balance; letter-spacing: -0.02em; line-height: 1.15; margin: 0; }
+  h2 { font-size: 21px; font-weight: 660; }
+  h3 { font-size: 15px; font-weight: 640; letter-spacing: -0.008em; }
+  p { margin: 12px 0; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 640; }
+  a { color: var(--accent-bright); }
+  ul { margin: 12px 0; padding-left: 0; list-style: none; }
+  ul li { position: relative; padding-left: 20px; margin: 7px 0; color: var(--ink-soft); }
+  ul li::before { content: "–"; position: absolute; left: 4px; color: var(--accent); font-weight: 600; }
+  ul li b { color: var(--ink); font-weight: 600; }
+
+  /* HEADER */
+  .hero { padding-top: 52px; padding-bottom: 26px; border-top: none; }
+  .hero h1 { font-size: clamp(30px, 5vw, 40px); font-weight: 700; letter-spacing: -0.03em; }
+  .hero .sub { font-size: 17px; color: var(--ink-soft); margin-top: 14px; max-width: 60ch; }
+  .metabar {
+    display: flex; flex-wrap: wrap; gap: 10px 30px;
+    margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line);
+  }
+  .metabar div { display: flex; flex-direction: column; gap: 3px; }
+  .metabar .k { font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-faint); }
+  .metabar .v { font-size: 14px; color: var(--ink); font-weight: 560; }
+
+  /* TWO-COLUMN SCOPE */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 6px; }
+  .col h3 { margin-bottom: 4px; }
+  .col .chip { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* CONSTRAINT NOTE */
+  .note {
+    background: var(--paper-2); border: 1px solid var(--line);
+    border-left: 3px solid var(--amber); border-radius: var(--radius);
+    padding: 16px 18px; margin-top: 14px;
+  }
+  .note p { margin: 0; font-size: 14.5px; }
+
+  /* DIAGRAM */
+  .diagram { margin: 16px 0 6px; display: flex; flex-direction: column; }
+  .layer { background: var(--paper-2); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
+  .layer .lhead { display: flex; align-items: baseline; gap: 9px; margin-bottom: 11px; flex-wrap: wrap; }
+  .layer .lnum { font-size: 10px; font-weight: 700; color: var(--paper-2); background: var(--accent); border-radius: 3px; padding: 2px 6px; }
+  .layer .ltitle { font-weight: 640; font-size: 15px; }
+  .layer .lsub { color: var(--ink-faint); font-size: 12.5px; }
+  .nodes { display: flex; flex-wrap: wrap; gap: 7px; }
+  .node { font-size: 12px; font-weight: 500; background: var(--paper-sunk); color: var(--ink); border: 1px solid var(--line); border-radius: 3px; padding: 6px 10px; white-space: nowrap; }
+  .node.gate { background: var(--amber-wash); border-color: color-mix(in srgb, var(--amber) 55%, transparent); color: var(--amber); font-weight: 640; }
+  .connector { align-self: center; width: 2px; height: 18px; background: var(--line-strong); position: relative; }
+  .connector::after { content: "▼"; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%); color: var(--line-strong); font-size: 9px; }
+
+  /* TABLE */
+  .table-scroll { overflow-x: auto; margin: 14px 0 4px; border: 1px solid var(--line); border-radius: var(--radius); }
+  table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 14px; }
+  th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; background: var(--paper-sunk); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.what { color: var(--ink); font-weight: 540; width: 44%; }
+  td .m { font-size: 12px; color: var(--accent-bright); }
+
+  /* GANTT */
+  .gantt { margin: 14px 0 20px; display: flex; flex-direction: column; gap: 6px; }
+  .gantt .scale { display: grid; grid-template-columns: repeat(12, 1fr); font-size: 9px; color: var(--ink-faint); padding-left: 128px; margin-bottom: 2px; }
+  .grow { display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; }
+  .grow .glabel { font-size: 10.5px; color: var(--ink-soft); font-weight: 560; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gtrack { position: relative; height: 18px; background: var(--paper-sunk); border-radius: 3px; overflow: hidden; }
+  .gbar { position: absolute; top: 3px; height: 12px; border-radius: 3px; background: var(--accent); }
+  .gbar.ongoing { background: repeating-linear-gradient(45deg, var(--accent), var(--accent) 5px, var(--accent-bright) 5px, var(--accent-bright) 10px); }
+  .gbar.gated { background: var(--amber); }
+  .gbar.expand { background: color-mix(in srgb, var(--accent) 50%, var(--paper-sunk)); }
+
+  /* MILESTONES */
+  .phase { display: grid; grid-template-columns: 34px 1fr auto; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); align-items: baseline; }
+  .phase:first-of-type { border-top: none; }
+  .phase .pn { font-size: 16px; font-weight: 400; color: var(--accent); }
+  .phase h3 { margin-bottom: 3px; }
+  .phase p { margin: 0; font-size: 13.5px; }
+  .phase .pdur { font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; white-space: nowrap; }
+
+  footer { border-top: 1px solid var(--line); padding: 24px 0 54px; color: var(--ink-faint); font-size: 13px; }
+  footer b { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 560px) {
+    .cols { grid-template-columns: 1fr; gap: 20px; }
+    .phase { grid-template-columns: 26px 1fr; }
+    .phase .pdur { grid-column: 2; }
+  }
+
+  /* PRINT */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { margin: 15mm 16mm; }
+  @media print {
+    html, body { background: #fff; }
+    body { font-size: 12.5px; }
+    .wrap { max-width: none; padding: 0; }
+    section { padding: 20px 0; }
+    .hero { padding-top: 6px; }
+    .note, .layer, .phase, .table-scroll tr, .col, footer { break-inside: avoid; }
+    .eyebrow { break-after: avoid; }
+    .layer { box-shadow: none; }
+    .table-scroll { overflow: visible; } table { min-width: 0; }
+    a { color: var(--ink); }
+  }
+</style>
+
+<div class="wrap">
+
+  <section class="hero">
+    <span class="eyebrow">Product Requirements · Draft</span>
+    <h1>AI Chief of Staff</h1>
+    <p class="sub">An assistant that monitors your email, Slack, calls, and texts, tracks your tasks and priorities, and drafts responses and actions for your approval.</p>
+    <div class="metabar">
+      <div><span class="k">For</span><span class="v">Jonathan Nutt</span></div>
+      <div><span class="k">Author</span><span class="v">Mario Valdes</span></div>
+      <div><span class="k">Date</span><span class="v">July 28, 2026</span></div>
+      <div><span class="k">Status</span><span class="v">Draft v1</span></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Summary</span>
+    <p>Jonathan — here's how I'd build the assistant you described. It ingests your communications, keeps a running model of your tasks, the people you deal with, and how you like things handled, then produces drafts and actions that you approve before anything happens. This covers scope, architecture, the one hard constraint, security, and a 12-week build plan.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">Scope</span>
+    <div class="cols">
+      <div class="col">
+        <span class="chip">In scope · v1</span>
+        <ul>
+          <li>Read <b>Outlook</b> (all mailboxes) and <b>Slack</b> (DMs + channels)</li>
+          <li>Business <b>VoIP call + text</b> transcripts</li>
+          <li>Task + priority tracking, with a daily brief</li>
+          <li>Draft emails, replies, and texts — approval required to send</li>
+          <li>Answers and feedback across a set of topics you define</li>
+          <li>Actions in selected web apps via API, approval-gated</li>
+        </ul>
+      </div>
+      <div class="col">
+        <span class="chip">Out of scope · v1</span>
+        <ul>
+          <li>Personal-cell call audio or iMessage/SMS (see constraint)</li>
+          <li>Any autonomous sending</li>
+          <li>Connections to PFG systems before a security review</li>
+          <li>Voice replies / real-time call assistance</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Constraint · calls &amp; texts</span>
+    <h2>Capturing voice and SMS</h2>
+    <div class="note">
+      <p>Live call audio and iMessage/SMS on a personal phone aren't reachable by software — the OS blocks it. To capture calls and texts, we route them through a VoIP number (Dialpad, Aircall, or OpenPhone) that records and transcribes, and the assistant reads the transcripts over the provider's API. Recording also needs a consent review before we enable it — several states require all-party consent.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Architecture</span>
+    <h2>Three stages: ingest, reason, act</h2>
+    <p>Ingest is read-only. The reasoning layer holds memory and task state. Every outbound action passes an approval step before it leaves the system.</p>
+    <div class="diagram">
+      <div class="layer">
+        <div class="lhead"><span class="lnum">01</span><span class="ltitle">Ingest</span><span class="lsub">read-only</span></div>
+        <div class="nodes">
+          <span class="node">Outlook / M365</span>
+          <span class="node">Slack</span>
+          <span class="node">VoIP transcripts</span>
+          <span class="node">Business SMS</span>
+        </div>
+      </div>
+      <div class="connector"></div>
+      <div class="layer">
+        <div class="lhead"><span class="lnum">02</span><span class="ltitle">Reason</span><span class="lsub">Claude Opus 4.8</span></div>
+        <div class="nodes">
+          <span class="node">Preference memory</span>
+          <span class="node">Task + priority state</span>
+          <span class="node">People / context graph</span>
+        </div>
+      </div>
+      <div class="connector"></div>
+      <div class="layer">
+        <div class="lhead"><span class="lnum">03</span><span class="ltitle">Act</span><span class="lsub">approval-gated</span></div>
+        <div class="nodes">
+          <span class="node">Draft email</span>
+          <span class="node">Draft reply / text</span>
+          <span class="node">Web-app task</span>
+          <span class="node gate">Approval queue</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:14.5px">The agent holds no send credentials. Drafts and actions are written to an approval queue that reaches you over Slack or text; a separate service performs the send only after you approve. Approval is enforced by which service holds the keys, not by instructions to the model.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">Components</span>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Requirement</th><th>Implementation</th></tr></thead>
+        <tbody>
+          <tr><td class="what">Email (all mailboxes)</td><td><span class="m">Microsoft Graph</span> — read + draft</td></tr>
+          <tr><td class="what">Slack</td><td><span class="m">Slack API</span> — user-scoped read</td></tr>
+          <tr><td class="what">Calls, VoIP, texts</td><td><span class="m">Dialpad / OpenPhone</span> — recordings + transcripts</td></tr>
+          <tr><td class="what">Tasks + priorities</td><td>Memory-backed tracker + daily brief</td></tr>
+          <tr><td class="what">Learns your preferences</td><td>Persistent memory, updated from your edits</td></tr>
+          <tr><td class="what">Drafts, never auto-send</td><td>Approval queue + separate send service</td></tr>
+          <tr><td class="what">Answers + feedback</td><td>Daily brief + on-demand Q&amp;A by DM</td></tr>
+          <tr><td class="what">Web-app actions</td><td>Direct API where available; browser automation otherwise</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Security</span>
+    <ul>
+      <li>Self-hosted on infrastructure we control; <b>Anthropic API under zero-retention, no-training terms</b></li>
+      <li>Least-privilege, revocable credential per integration; no send credential in the agent's path</li>
+      <li>Encryption at rest; audit log of every item read and every action proposed</li>
+      <li>Security review before any connection to PFG systems</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="eyebrow">Timeline · ~12 weeks</span>
+    <div class="gantt">
+      <div class="scale"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span></div>
+      <div class="grow"><span class="glabel">1 · Email + Slack</span><div class="gtrack"><div class="gbar" style="left:0%;width:16.6%"></div></div></div>
+      <div class="grow"><span class="glabel">2 · Drafts + gate</span><div class="gtrack"><div class="gbar" style="left:16.6%;width:16.6%"></div></div></div>
+      <div class="grow"><span class="glabel">3 · Preference memory</span><div class="gtrack"><div class="gbar ongoing" style="left:25%;width:75%"></div></div></div>
+      <div class="grow"><span class="glabel">4 · Voice + text</span><div class="gtrack"><div class="gbar gated" style="left:41.6%;width:25%"></div></div></div>
+      <div class="grow"><span class="glabel">5 · Web actions</span><div class="gtrack"><div class="gbar expand" style="left:66.6%;width:33.4%"></div></div></div>
+    </div>
+    <div class="phase"><span class="pn">1</span><div><h3>Email + Slack ingest, daily brief</h3><p>Read-only. Working brief across Outlook and Slack in week one.</p></div><span class="pdur">Weeks 1–2</span></div>
+    <div class="phase"><span class="pn">2</span><div><h3>Drafting + approval queue</h3><p>Drafts for email, replies, and texts routed through the approval gate.</p></div><span class="pdur">Weeks 3–4</span></div>
+    <div class="phase"><span class="pn">3</span><div><h3>Preference memory</h3><p>Your edits feed back into how it drafts and ranks priorities.</p></div><span class="pdur">Week 4 →</span></div>
+    <div class="phase"><span class="pn">4</span><div><h3>Voice + text capture</h3><p>VoIP transcripts flow in, after the consent review clears.</p></div><span class="pdur">Weeks 6–9</span></div>
+    <div class="phase"><span class="pn">5</span><div><h3>Web-app actions</h3><p>Start with one or two apps behind the gate, expand as they prove out.</p></div><span class="pdur">Weeks 9–12+</span></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Open questions</span>
+    <ul>
+      <li>Which web apps should it drive first? Sets the phase-5 scope.</li>
+      <li>Do we introduce a VoIP number, and which provider?</li>
+      <li>Hosting: our server, or your own M365 tenant?</li>
+      <li>Who owns the consent review, and which states apply?</li>
+    </ul>
+  </section>
+
+  <footer>
+    <b>Mario Valdes</b> — Draft for review. Phase 1 can begin on approval.<br>
+    Confidential — prepared for Jonathan Nutt.
+  </footer>
+
+</div>
