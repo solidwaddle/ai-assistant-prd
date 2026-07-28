@@ -124,7 +124,7 @@
 
   /* GANTT */
   .gantt { margin: 14px 0 20px; display: flex; flex-direction: column; gap: 6px; }
-  .gantt .scale { display: grid; grid-template-columns: repeat(12, 1fr); font-size: 9px; color: var(--ink-faint); padding-left: 128px; margin-bottom: 2px; }
+  .gantt .scale { display: grid; grid-template-columns: repeat(10, 1fr); font-size: 9px; color: var(--ink-faint); padding-left: 128px; margin-bottom: 2px; }
   .grow { display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; }
   .grow .glabel { font-size: 10.5px; color: var(--ink-soft); font-weight: 560; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .gtrack { position: relative; height: 18px; background: var(--paper-sunk); border-radius: 3px; overflow: hidden; }
@@ -183,7 +183,7 @@
 
   <section>
     <span class="eyebrow">Summary</span>
-    <p>Jonathan — here's how I'd build the assistant you described. It ingests your communications, keeps a running model of your tasks, the people you deal with, and how you like things handled, then produces drafts and actions that you approve before anything happens. This covers scope, architecture, the one hard constraint, security, and a 12-week build plan.</p>
+    <p>Jonathan — here's how I'd build the assistant you described. It ingests your communications, keeps a running model of your tasks, the people you deal with, and how you like things handled, then produces drafts and actions that you approve before anything happens. This covers scope, architecture, the one hard constraint, security, and a 2-week build plan.</p>
   </section>
 
   <section>
@@ -287,20 +287,20 @@
   </section>
 
   <section>
-    <span class="eyebrow">Timeline · ~12 weeks</span>
+    <span class="eyebrow">Timeline · 2 weeks</span>
     <div class="gantt">
-      <div class="scale"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span></div>
-      <div class="grow"><span class="glabel">1 · Email + Slack</span><div class="gtrack"><div class="gbar" style="left:0%;width:16.6%"></div></div></div>
-      <div class="grow"><span class="glabel">2 · Drafts + gate</span><div class="gtrack"><div class="gbar" style="left:16.6%;width:16.6%"></div></div></div>
-      <div class="grow"><span class="glabel">3 · Preference memory</span><div class="gtrack"><div class="gbar ongoing" style="left:25%;width:75%"></div></div></div>
-      <div class="grow"><span class="glabel">4 · Voice + text</span><div class="gtrack"><div class="gbar gated" style="left:41.6%;width:25%"></div></div></div>
-      <div class="grow"><span class="glabel">5 · Web actions</span><div class="gtrack"><div class="gbar expand" style="left:66.6%;width:33.4%"></div></div></div>
+      <div class="scale"><span>D1</span><span>D2</span><span>D3</span><span>D4</span><span>D5</span><span>D6</span><span>D7</span><span>D8</span><span>D9</span><span>D10</span></div>
+      <div class="grow"><span class="glabel">1 · Email + Slack</span><div class="gtrack"><div class="gbar" style="left:0%;width:20%"></div></div></div>
+      <div class="grow"><span class="glabel">2 · Drafts + gate</span><div class="gtrack"><div class="gbar" style="left:20%;width:30%"></div></div></div>
+      <div class="grow"><span class="glabel">3 · Preference memory</span><div class="gtrack"><div class="gbar ongoing" style="left:30%;width:70%"></div></div></div>
+      <div class="grow"><span class="glabel">4 · Voice + text</span><div class="gtrack"><div class="gbar gated" style="left:50%;width:40%"></div></div></div>
+      <div class="grow"><span class="glabel">5 · Web actions</span><div class="gtrack"><div class="gbar expand" style="left:70%;width:30%"></div></div></div>
     </div>
-    <div class="phase"><span class="pn">1</span><div><h3>Email + Slack ingest, daily brief</h3><p>Read-only. Working brief across Outlook and Slack in week one.</p></div><span class="pdur">Weeks 1–2</span></div>
-    <div class="phase"><span class="pn">2</span><div><h3>Drafting + approval queue</h3><p>Drafts for email, replies, and texts routed through the approval gate.</p></div><span class="pdur">Weeks 3–4</span></div>
-    <div class="phase"><span class="pn">3</span><div><h3>Preference memory</h3><p>Your edits feed back into how it drafts and ranks priorities.</p></div><span class="pdur">Week 4 →</span></div>
-    <div class="phase"><span class="pn">4</span><div><h3>Voice + text capture</h3><p>VoIP transcripts flow in, after the consent review clears.</p></div><span class="pdur">Weeks 6–9</span></div>
-    <div class="phase"><span class="pn">5</span><div><h3>Web-app actions</h3><p>Start with one or two apps behind the gate, expand as they prove out.</p></div><span class="pdur">Weeks 9–12+</span></div>
+    <div class="phase"><span class="pn">1</span><div><h3>Email + Slack ingest, daily brief</h3><p>Read-only. Working brief across Outlook and Slack on day one.</p></div><span class="pdur">Days 1–2</span></div>
+    <div class="phase"><span class="pn">2</span><div><h3>Drafting + approval queue</h3><p>Drafts for email, replies, and texts routed through the approval gate.</p></div><span class="pdur">Days 3–5</span></div>
+    <div class="phase"><span class="pn">3</span><div><h3>Preference memory</h3><p>Your edits feed back into how it drafts and ranks priorities.</p></div><span class="pdur">Day 4 →</span></div>
+    <div class="phase"><span class="pn">4</span><div><h3>Voice + text capture</h3><p>VoIP transcripts flow in, after the consent review clears.</p></div><span class="pdur">Days 6–9</span></div>
+    <div class="phase"><span class="pn">5</span><div><h3>Web-app actions</h3><p>Start with one or two apps behind the gate, expand as they prove out.</p></div><span class="pdur">Days 8–10+</span></div>
   </section>
 
   <section>
